@@ -17,6 +17,10 @@ const Menu = () => {
   )
 }
 
+const Notification = ({ notification }) => (
+  <div>{ notification }</div>
+)
+
 const AnecdoteList = ({ anecdotes }) => (
   <div>
     <h2>Anecdotes</h2>
@@ -81,6 +85,16 @@ const CreateNew = (props) => {
       votes: 0
     })
     navigate('/')
+
+    const anecdoteContent = e.target.querySelector('[name=content]').value
+    showNotification(anecdoteContent)
+  }
+
+  const showNotification = (content) => {
+    props.setNotification(content)
+    setTimeout(() => {
+      props.setNotification('')
+    }, 5000);
   }
 
   return (
@@ -150,9 +164,10 @@ const App = () => {
       <h1>Software anecdotes</h1>
       <Router>
         <Menu />
+        <Notification notification={notification} />
         <Routes>
           <Route path="/" element={<AnecdoteList anecdotes={anecdotes} />} />
-          <Route path="/create" element={<CreateNew addNew={addNew} />} />
+          <Route path="/create" element={<CreateNew addNew={addNew} setNotification={setNotification} />} />
           <Route path="/about" element={<About />} />
           <Route path="/anectodes/:id" element={<Anecdote anecdotes={anecdotes} />} />
         </Routes>
